@@ -12,7 +12,9 @@ class Recipe(
     val description: String,
     val imageUrl: String,
     val instructionUrl: String,
-    val label: String) {
+    val label: String,
+    val serving:Int,
+    val ingredients: ArrayList<String>) {
 
     companion object {
 
@@ -31,7 +33,10 @@ class Recipe(
                         recipes.getJSONObject(it).getString("description"),
                         recipes.getJSONObject(it).getString("image"),
                         recipes.getJSONObject(it).getString("url"),
-                        recipes.getJSONObject(it).getString("dietLabel"))
+                        recipes.getJSONObject(it).getString("dietLabel"),
+                        recipes.getJSONObject(it).getInt("servings"),
+                        arrayListOf(recipes.getJSONObject(it).getString("ingredientLines")))
+
                 }
             } catch (e: JSONException) {
                 e.printStackTrace()

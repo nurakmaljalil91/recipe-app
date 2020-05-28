@@ -17,7 +17,17 @@ class MainActivity : AppCompatActivity() {
 
         val recipeList = Recipe.getRecipesFromFile("recipes.json",this)
 
+
         val adapter = RecipeAdapter(this, recipeList)
         listView.adapter = adapter
+
+        val context = this
+        listView.setOnItemClickListener { _, _, position, _ ->
+            val selectedRecipe = recipeList[position]
+
+            val detailIntent = RecipeDetailActivity.newIntent(context, selectedRecipe)
+
+            startActivity(detailIntent)
+        }
     }
 }
