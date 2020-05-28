@@ -48,6 +48,7 @@ class RecipeAdapter(private val context: Context,
 
 
         Picasso.with(context).load(recipe.imageUrl).placeholder(R.mipmap.ic_launcher).into(thumbnailImageView)
+        Picasso.with(context).setLoggingEnabled(true)
 
 
         return rowView
