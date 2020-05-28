@@ -4,18 +4,26 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.webkit.WebView
+import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import com.squareup.picasso.Picasso
 import java.io.Serializable
+import android.util.Log
+import org.json.JSONArray
 
 class RecipeDetailActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
     private lateinit var imgView: ImageView
     private lateinit var titleView:TextView
+    private lateinit var ingredietListView:ListView
+
+
 
     companion object {
         const val EXTRA_TITLE = "title"
@@ -31,8 +39,11 @@ class RecipeDetailActivity : AppCompatActivity() {
             detailIntent.putExtra(EXTRA_URL, recipe.instructionUrl)
             detailIntent.putExtra(EXTRA_IMG, recipe.imageUrl)
             detailIntent.putExtra(EXTRA_SERVING,recipe.serving)
-            bundle.putStringArrayList(EXTRA_INGREDIENTS, recipe.ingredients)
-            detailIntent.putExtras(bundle)
+            val list = Array(recipe.ingredients.length()){
+                recipe.ingredients.getString(it)
+            }
+
+            detailIntent.putExtra(EXTRA_INGREDIENTS,list)
 
 
             return detailIntent
@@ -47,16 +58,22 @@ class RecipeDetailActivity : AppCompatActivity() {
         val url = intent.extras.getString(EXTRA_URL)
         val img = intent.extras.getString(EXTRA_IMG)
         val serving = intent.extras.getInt(EXTRA_SERVING)
-        val ingredients = intent.extras.getStringArrayList(EXTRA_INGREDIENTS)
+        val ingredients = intent.extras.getStringArray(EXTRA_INGREDIENTS)
+
 
         setTitle(title)
 
         //webView = findViewById(R.id.detail_web_view)
         imgView = findViewById(R.id.detail_img_view)
         titleView = findViewById(R.id.titleView)
+        ingredietListView = findViewById(R.id.ingredientsList)
 
+
+        val arrayAdapter = IngrediantAdapter(this, ingredients)
+        ingredietListView.adapter = arrayAdapter
         titleView.text = ingredients[0]
 
+        Log.d("TAG",ingredients[0])
         val titleTypeFace = ResourcesCompat.getFont(this, R.font.josefinsans_bold)
         titleView.typeface = titleTypeFace
 

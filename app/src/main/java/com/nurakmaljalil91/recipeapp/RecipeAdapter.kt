@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.squareup.picasso.Picasso
+import org.json.JSONArray
 
 class RecipeAdapter(private val context: Context,
                     private val dataSource: ArrayList<Recipe>) : BaseAdapter() {

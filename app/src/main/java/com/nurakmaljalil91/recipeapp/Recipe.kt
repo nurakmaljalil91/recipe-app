@@ -3,6 +3,7 @@
 package com.nurakmaljalil91.recipeapp
 
 import android.content.Context
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -14,7 +15,7 @@ class Recipe(
     val instructionUrl: String,
     val label: String,
     val serving:Int,
-    val ingredients: ArrayList<String>) {
+    val ingredients: JSONArray) {
 
     companion object {
 
@@ -35,7 +36,7 @@ class Recipe(
                         recipes.getJSONObject(it).getString("url"),
                         recipes.getJSONObject(it).getString("dietLabel"),
                         recipes.getJSONObject(it).getInt("servings"),
-                        arrayListOf(recipes.getJSONObject(it).getString("ingredientLines")))
+                        recipes.getJSONObject(it).getJSONArray("ingredientLines"))
 
                 }
             } catch (e: JSONException) {

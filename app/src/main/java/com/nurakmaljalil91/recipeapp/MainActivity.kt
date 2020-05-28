@@ -2,6 +2,7 @@ package com.nurakmaljalil91.recipeapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.ListView
 
@@ -29,5 +30,6 @@ class MainActivity : AppCompatActivity() {
 
             startActivity(detailIntent)
         }
+        Log.d("TAG","TEST")
     }
 }
