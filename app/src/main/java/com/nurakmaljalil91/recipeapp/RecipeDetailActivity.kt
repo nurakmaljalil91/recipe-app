@@ -14,6 +14,8 @@ import androidx.core.content.res.ResourcesCompat
 import com.squareup.picasso.Picasso
 import java.io.Serializable
 import android.util.Log
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import org.json.JSONArray
 
 class RecipeDetailActivity : AppCompatActivity() {
@@ -22,7 +24,8 @@ class RecipeDetailActivity : AppCompatActivity() {
     private lateinit var imgView: ImageView
     private lateinit var titleView:TextView
     private lateinit var ingredietListView:ListView
-
+    private lateinit var toolbar: Toolbar
+    private lateinit var labelView:TextView
 
 
     companion object {
@@ -31,6 +34,16 @@ class RecipeDetailActivity : AppCompatActivity() {
         const val EXTRA_IMG = "image"
         const val EXTRA_SERVING = "servings"
         const val EXTRA_INGREDIENTS = "ingredientLines"
+        const val EXTRA_LABEL = "label"
+
+        private val LABEL_COLORS = hashMapOf(
+            "Low-Carb" to R.color.colorLowCarb,
+            "Low-Fat" to R.color.colorLowFat,
+            "Low-Sodium" to R.color.colorLowSodium,
+            "Medium-Carb" to R.color.colorMediumCarb,
+            "Vegetarian" to R.color.colorVegetarian,
+            "Balanced" to R.color.colorBalanced
+        )
 
         fun newIntent(context: Context, recipe: Recipe): Intent {
             val detailIntent = Intent(context, RecipeDetailActivity::class.java)
@@ -44,11 +57,14 @@ class RecipeDetailActivity : AppCompatActivity() {
             }
 
             detailIntent.putExtra(EXTRA_INGREDIENTS,list)
+            detailIntent.putExtra(EXTRA_LABEL,recipe.label)
 
 
             return detailIntent
         }
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +75,7 @@ class RecipeDetailActivity : AppCompatActivity() {
         val img = intent.extras.getString(EXTRA_IMG)
         val serving = intent.extras.getInt(EXTRA_SERVING)
         val ingredients = intent.extras.getStringArray(EXTRA_INGREDIENTS)
-
+        val label = intent.extras.getString(EXTRA_LABEL)
 
         setTitle(title)
 
@@ -67,17 +83,23 @@ class RecipeDetailActivity : AppCompatActivity() {
         imgView = findViewById(R.id.detail_img_view)
         titleView = findViewById(R.id.titleView)
         ingredietListView = findViewById(R.id.ingredientsList)
+        labelView = findViewById(R.id.ingLabelView)
 
 
         val arrayAdapter = IngrediantAdapter(this, ingredients)
         ingredietListView.adapter = arrayAdapter
-        titleView.text = ingredients[0]
+        titleView.text = "Serving for $serving"
+        labelView.setText(label)
 
-        Log.d("TAG",ingredients[0])
         val titleTypeFace = ResourcesCompat.getFont(this, R.font.josefinsans_bold)
         titleView.typeface = titleTypeFace
-
+        labelView.typeface = titleTypeFace
         Picasso.with(this).load(img).placeholder(R.mipmap.ic_launcher).into(imgView)
+    
+        toolbar = findViewById<Toolbar>(R.id.main_toolbar)
+        setSupportActionBar(toolbar)
+
+        labelView.setTextColor(ContextCompat.getColor(this, RecipeDetailActivity.LABEL_COLORS[label] ?: R.color.colorPrimary))
 
        // webView.loadUrl(url)
     }
